@@ -524,6 +524,7 @@ export async function cancelBooking(
     select: {
       id: true,
       buyerId: true,
+      date: true,
       status: true,
       totalCredits: true,
       provider: { select: { userId: true, user: { select: { name: true } } } },

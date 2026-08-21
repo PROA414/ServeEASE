@@ -1,9 +1,19 @@
 import { NextResponse } from "next/server";
 import { Resend } from "resend";
+import { rateLimit, rateLimitKey } from "@/lib/rate-limit";
 
 const resend = new Resend(process.env.RESEND_API_KEY ?? "");
 
 export async function POST(request: Request) {
+  const key = rateLimitKey(request, "email");
+  const limit = rateLimit(key, 10, 60_000);
+  if (!limit.allowed) {
+    return NextResponse.json(
+      { error: "Too many requests. Try again later." },
+      { status: 429, headers: { "Retry-After": String(Math.ceil(limit.retryAfterMs / 1000)) } },
+    );
+  }
+
   const body = await request.json().catch(() => null);
 
   if (!body || typeof body !== "object") {

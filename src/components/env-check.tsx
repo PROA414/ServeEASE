@@ -12,6 +12,7 @@ const REQUIRED_ENV_VARS = [
   { key: "RESEND_FROM_EMAIL", label: "Resend From Email", description: "Verified sender address (e.g. SearveEASE <noreply@yourdomain.com>)" },
   { key: "SENTRY_DSN", label: "Sentry DSN", description: "Sentry error tracking DSN" },
   { key: "NEXT_PUBLIC_APP_URL", label: "App URL", description: "Public URL of your app" },
+  { key: "BLOB_READ_WRITE_TOKEN", label: "Blob Read/Write Token", description: "Vercel Blob token for photo uploads (vercel_blob_...)" },
 ] as const;
 
 const PLACEHOLDER_PREFIXES = ["YOUR_", "RE_...", "SK_TEST_...", "PK_TEST_...", "WHSEC_...", "HTTPS://...@SENTRY.IO", "POSTGRESQL://POSTGRES:"];

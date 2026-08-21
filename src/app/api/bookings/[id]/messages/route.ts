@@ -2,6 +2,7 @@ import { NextResponse } from "next/server";
 import { auth } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
 import { createNotification } from "@/lib/notifications";
+import { rateLimit, rateLimitKey } from "@/lib/rate-limit";
 import { headers } from "next/headers";
 
 export async function GET(
@@ -56,6 +57,15 @@ export async function POST(
   { params }: { params: Promise<{ id: string }> }
 ) {
   const { id } = await params;
+  const key = rateLimitKey(request, `chat:${id}`);
+  const limit = rateLimit(key, 30, 60_000);
+  if (!limit.allowed) {
+    return NextResponse.json(
+      { error: "Too many messages. Slow down." },
+      { status: 429, headers: { "Retry-After": String(Math.ceil(limit.retryAfterMs / 1000)) } },
+    );
+  }
+
   const ctx = await headers();
   const session = await auth.api.getSession({ headers: ctx });
 

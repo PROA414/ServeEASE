@@ -2,8 +2,18 @@ import { NextResponse } from "next/server";
 import { auth } from "@/lib/auth";
 import { headers } from "next/headers";
 import { put } from "@vercel/blob";
+import { rateLimit, rateLimitKey } from "@/lib/rate-limit";
 
 export async function POST(request: Request) {
+  const key = rateLimitKey(request, "upload");
+  const limit = rateLimit(key, 20, 60_000);
+  if (!limit.allowed) {
+    return NextResponse.json(
+      { error: "Too many uploads. Try again later." },
+      { status: 429, headers: { "Retry-After": String(Math.ceil(limit.retryAfterMs / 1000)) } },
+    );
+  }
+
   const ctx = await headers();
   const session = await auth.api.getSession({ headers: ctx });
 

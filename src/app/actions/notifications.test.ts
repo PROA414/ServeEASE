@@ -15,6 +15,9 @@ vi.mock("@/lib/auth", () => ({
 
 vi.mock("@/lib/prisma", () => ({
   prisma: {
+    user: {
+      findUnique: vi.fn(),
+    },
     notification: {
       count: vi.fn(),
       findMany: vi.fn(),
@@ -68,6 +71,10 @@ describe("notifications", () => {
 
   it("getNotifications returns unread count and recent notifications", async () => {
     vi.mocked(auth.api.getSession).mockResolvedValue({ user: { id: "user-1" } } as any);
+    vi.mocked(prisma.user.findUnique).mockResolvedValue({
+      notifyBookings: true,
+      notifyMessages: true,
+    } as any);
     vi.mocked(prisma.notification.count).mockResolvedValue(2);
     vi.mocked(prisma.notification.findMany).mockResolvedValue([
       {
