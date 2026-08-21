@@ -1,2 +1,2 @@
 # ServeEASE
-a play to buy people services
+a place to buy people services
