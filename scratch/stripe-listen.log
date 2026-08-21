@@ -1,0 +1,28 @@
+Checking for new versions...
+
+Getting ready...
+Ready! You are using Stripe API Version [2026-07-29.dahlia]. Your webhook signing secret is whsec_4c333ee9198e33a0805f8d77bbd4f94516f232233a17637dbb30324e863dfcbf (^C to quit)
+2026-08-20 11:42:05   --> product.created [evt_1U6TPwFm11eB5LLCZnYMeK7H]
+2026-08-20 11:42:06   --> price.created [evt_1U6TPxFm11eB5LLCeFPUSK25]
+2026-08-20 11:42:06  <--  [200] POST http://localhost:3000/api/payment/webhook [evt_1U6TPwFm11eB5LLCZnYMeK7H]
+2026-08-20 11:42:06  <--  [200] POST http://localhost:3000/api/payment/webhook [evt_1U6TPxFm11eB5LLCeFPUSK25]
+2026-08-20 11:42:09   --> payment_intent.succeeded [evt_3U6TQ0Fm11eB5LLC1xqoUwPX]
+2026-08-20 11:42:09  <--  [200] POST http://localhost:3000/api/payment/webhook [evt_3U6TQ0Fm11eB5LLC1xqoUwPX]
+2026-08-20 11:42:09   --> charge.succeeded [evt_3U6TQ0Fm11eB5LLC1LdkSyT8]
+2026-08-20 11:42:09  <--  [200] POST http://localhost:3000/api/payment/webhook [evt_3U6TQ0Fm11eB5LLC1LdkSyT8]
+2026-08-20 11:42:10   --> payment_intent.created [evt_3U6TQ0Fm11eB5LLC1vxCHao1]
+2026-08-20 11:42:10  <--  [200] POST http://localhost:3000/api/payment/webhook [evt_3U6TQ0Fm11eB5LLC1vxCHao1]
+2026-08-20 11:42:10   --> checkout.session.completed [evt_1U6TQ0Fm11eB5LLCPAIknCSq]
+2026-08-20 11:42:10  <--  [400] POST http://localhost:3000/api/payment/webhook [evt_1U6TQ0Fm11eB5LLCPAIknCSq]
+2026-08-20 11:42:12   --> charge.updated [evt_3U6TQ0Fm11eB5LLC1UbugmOZ]
+2026-08-20 11:42:12  <--  [200] POST http://localhost:3000/api/payment/webhook [evt_3U6TQ0Fm11eB5LLC1UbugmOZ]
+2026-08-20 11:47:36   --> payment_intent.succeeded [evt_3U6TVFFm11eB5LLC1jbjn95o]
+2026-08-20 11:47:36   --> payment_intent.created [evt_3U6TVFFm11eB5LLC1SzpsZYu]
+2026-08-20 11:47:37   --> checkout.session.completed [evt_1U6TVHFm11eB5LLCBIDqtLWR]
+2026-08-20 11:47:37   --> charge.succeeded [evt_3U6TVFFm11eB5LLC1Mk74wOT]
+2026-08-20 11:47:37  <--  [200] POST http://localhost:3000/api/payment/webhook [evt_3U6TVFFm11eB5LLC1jbjn95o]
+2026-08-20 11:47:37  <--  [200] POST http://localhost:3000/api/payment/webhook [evt_3U6TVFFm11eB5LLC1SzpsZYu]
+2026-08-20 11:47:37  <--  [200] POST http://localhost:3000/api/payment/webhook [evt_3U6TVFFm11eB5LLC1Mk74wOT]
+2026-08-20 11:47:37  <--  [200] POST http://localhost:3000/api/payment/webhook [evt_1U6TVHFm11eB5LLCBIDqtLWR]
+2026-08-20 11:47:38   --> charge.updated [evt_3U6TVFFm11eB5LLC1WdyZngy]
+2026-08-20 11:47:38  <--  [200] POST http://localhost:3000/api/payment/webhook [evt_3U6TVFFm11eB5LLC1WdyZngy]

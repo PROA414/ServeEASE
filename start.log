@@ -1,0 +1,10 @@
+
+> searveease@1.0.0 start
+> next start -p 3131
+
+   ▲ Next.js 15.5.23
+   - Local:        http://localhost:3131
+   - Network:      http://192.168.100.202:3131
+
+ ✓ Starting...
+ ✓ Ready in 4s

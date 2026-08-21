@@ -1,0 +1,11 @@
+
+> searveease@1.0.0 start
+> next start -p 3000
+
+   ▲ Next.js 15.5.23
+   - Local:        http://localhost:3000
+   - Network:      http://192.168.100.202:3000
+
+ ✓ Starting...
+ ✓ Ready in 12.3s
+2026-08-20T14:06:12.743Z WARN [Better Auth]: User not found

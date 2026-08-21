@@ -1,0 +1,207 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+// ============================================
+// 1. USER MODEL - MUST BE FIRST
+// ============================================
+model User {
+  id            String   @id @default(cuid())
+  name          String
+  email         String   @unique
+  emailVerified Boolean  @default(false)
+  image         String?
+  password      String?
+  isAdmin           Boolean  @default(false)
+  notifyBookings    Boolean  @default(true)
+  notifyMessages    Boolean  @default(true)
+  createdAt         DateTime @default(now())
+  updatedAt         DateTime @updatedAt
+
+  // Relations
+  accounts        Account[]
+  sessions        Session[]
+  verifications   Verification[]
+  providerProfile ServiceProvider?
+  bookingsAsBuyer Booking[]           @relation("buyerBookings")
+  credits         CreditTransaction[]
+  messages        Message[]
+  disputes        Dispute[]           @relation("filedDisputes")
+  notifications   Notification[]
+}
+
+// ============================================
+// 2. ALL MODELS THAT REFERENCE USER
+// ============================================
+model Account {
+  id                    String    @id @default(cuid())
+  userId                String
+  user                  User      @relation(fields: [userId], references: [id])
+  accountId             String
+  providerId            String
+  issuer                String
+  accessToken           String?
+  refreshToken          String?
+  idToken               String?
+  accessTokenExpiresAt  DateTime?
+  refreshTokenExpiresAt DateTime?
+  scope                 String?
+  password              String?
+  createdAt             DateTime  @default(now())
+  updatedAt             DateTime  @updatedAt
+
+  @@unique([issuer, accountId])
+  @@index([userId])
+}
+
+model Session {
+  id        String   @id @default(cuid())
+  userId    String
+  user      User     @relation(fields: [userId], references: [id])
+  token     String   @unique
+  expiresAt DateTime
+  ipAddress String?
+  userAgent String?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([userId])
+}
+
+model Verification {
+  id         String   @id @default(cuid())
+  userId     String
+  user       User     @relation(fields: [userId], references: [id])
+  identifier String
+  value      String
+  expiresAt  DateTime
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+
+  @@index([userId])
+}
+
+model ServiceProvider {
+  id            String   @id @default(cuid())
+  userId        String   @unique
+  user          User     @relation(fields: [userId], references: [id])
+  category      String
+  dailyRate     Int
+  halfDayRate   Int
+  bio           String?
+  experience    String?
+  verified      Boolean  @default(false)
+  rating        Float    @default(0)
+  totalBookings Int      @default(0)
+  availableDays String? // comma-separated weekday numbers 0 (Sun) - 6 (Sat); null = all days
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+
+  bookings Booking[]
+}
+
+model Booking {
+  id           String          @id @default(cuid())
+  buyerId      String
+  buyer        User            @relation(fields: [buyerId], references: [id], name: "buyerBookings")
+  providerId   String
+  provider     ServiceProvider @relation(fields: [providerId], references: [id])
+  date         DateTime
+  duration     String
+  totalCredits Int
+  status       String          @default("pending")
+
+  checkInAt     DateTime?
+  checkOutAt    DateTime?
+  checkInPhoto  String?
+  checkOutPhoto String?
+
+  specialInstructions String?
+
+  checkInLat  Float?
+  checkInLng  Float?
+  checkOutLat Float?
+  checkOutLng Float?
+
+  rating  Float?
+  comment String?
+
+  dispute   Dispute?
+  messages  Message[]
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+
+  @@index([buyerId])
+  @@index([providerId])
+  @@index([date])
+}
+
+model Dispute {
+  id         String    @id @default(cuid())
+  bookingId  String    @unique
+  booking    Booking   @relation(fields: [bookingId], references: [id], onDelete: Cascade)
+  filedById  String
+  filedBy    User      @relation("filedDisputes", fields: [filedById], references: [id])
+  reason     String
+  status     String    @default("open") // open | resolved
+  resolution String? // buyer_refunded | provider_paid
+  adminNote  String?
+  resolvedAt DateTime?
+  createdAt  DateTime  @default(now())
+  updatedAt  DateTime  @updatedAt
+
+  @@index([status])
+  @@index([filedById])
+}
+
+model Message {
+  id        String   @id @default(cuid())
+  bookingId String
+  booking   Booking  @relation(fields: [bookingId], references: [id], onDelete: Cascade)
+  senderId  String
+  sender    User     @relation(fields: [senderId], references: [id])
+  content   String
+  createdAt DateTime @default(now())
+
+  @@index([bookingId])
+  @@index([senderId])
+}
+
+model Notification {
+  id        String    @id @default(cuid())
+  userId    String
+  user      User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  type      String // booking_request | booking_confirmed | booking_cancelled | checkin | checkout | payment_released | dispute_filed | dispute_resolved | message
+  title     String
+  body      String
+  link      String
+  bookingId String?
+  readAt    DateTime?
+  createdAt DateTime  @default(now())
+
+  @@index([userId])
+  @@index([userId, readAt])
+  @@index([bookingId])
+}
+
+model CreditTransaction {
+  id          String   @id @default(cuid())
+  userId      String
+  user        User     @relation(fields: [userId], references: [id])
+  amount      Int
+  balance     Int
+  type        String
+  reference   String?
+  description String?
+  status      String
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  @@index([userId])
+  @@index([createdAt])
+}
