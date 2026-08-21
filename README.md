@@ -13,7 +13,7 @@ A service marketplace platform connecting buyers with local service providers (c
 
 ## Quick Start
 
-```bash
+
 # 1. Clone and install
 git clone <repo-url>
 cd searveease
@@ -31,7 +31,6 @@ npm run seed
 
 # 5. Start the dev server
 npm run dev
-```
 
 Open [http://localhost:3000](http://localhost:3000).
 
